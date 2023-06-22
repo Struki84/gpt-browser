@@ -34,7 +34,7 @@ type GPTService struct {
 func NewGPTService() *GPTService {
 	return &GPTService{
 		Conversation: []string{},
-		Client:       openai.NewClient("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"),
+		Client:       openai.NewClient("api-key"),
 		Prompts:      Prompts{},
 	}
 }
