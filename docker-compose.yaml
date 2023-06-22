@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+  gpt-browser-db:
+    image: postgres:9.6.12
+    container_name: gpt-browser-db
+    environment:
+      - POSTGRES_DB=gpt-browser-db
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=gpt-browser-password
+      - DATABASE_PORT=5432
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+  app:
+    container_name: gpt-browser-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - DATABASE_HOST=gpt-browser-db
+      - DATABASE_PORT=5432
+      - DATABASE_USER=admin
+      - DATABASE_NAME=gpt-browser-db
+      - DATABASE_PASSWORD=gpt-browser-password
+    ports:
+      - "8082:8082"
+    volumes:
+      - .:/app
+      - ~/.netrc:/root/.netrc
+    depends_on:
+      - gpt-browser-db
+volumes:
+  db-data:
